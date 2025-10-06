@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TORTILO - Игровой проект</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Exo+2:wght@600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            overflow: hidden;
+            background: #0a0f14;
+            cursor: crosshair;
+        }
+        
+        #container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes shootingStar {
+            0% { transform: translate(0, 0); opacity: 1; }
+            100% { transform: translate(-300px, 300px); opacity: 0; }
+        }
+        
+        @keyframes fallLeaf {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        @keyframes neonPulse {
+            0%, 100% { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 40px #0ff, 0 0 80px #0ff; }
+            50% { text-shadow: 0 0 20px #fff, 0 0 30px #fff, 0 0 60px #0ff, 0 0 100px #0ff; }
+        }
+        
+        @keyframes ripple {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+        }
+        
+        .shooting-star {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+            animation: shootingStar 2s linear forwards;
+        }
+        
+        .leaf {
+            position: absolute;
+            font-size: 24px;
+            animation: fallLeaf 8s linear infinite;
+        }
+        
+        .click-effect {
+            position: absolute;
+            pointer-events: none;
+        }
+        
+        .ripple-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+            animation: ripple 0.8s ease-out forwards;
+        }
+        
+        #content {
+            position: relative;
+            z-index: 20;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            pointer-events: none;
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            color: white;
+            font-size: clamp(3rem, 15vw, 12rem);
+            letter-spacing: 0.1em;
+            animation: neonPulse 3s ease-in-out infinite;
+            user-select: none;
+        }
+        
+        h2 {
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 600;
+            color: #ef4444;
+            font-size: clamp(1.5rem, 5vw, 3rem);
+            margin-top: 1rem;
+            text-shadow: 0 0 10px #ef4444, 0 0 20px #ef4444, 0 0 30px #dc2626;
+            user-select: none;
+        }
+        
+        #social-links {
+            position: relative;
+            z-index: 20;
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            transition: transform 0.3s;
+            pointer-events: auto;
+        }
+        
+        .social-link:hover {
+            transform: scale(1.1);
+        }
+        
+        .social-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .social-link:hover .social-icon {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .social-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: #22d3ee;
+            transition: fill 0.3s;
+        }
+        
+        .social-link:hover .social-icon svg {
+            fill: #67e8f9;
+        }
+        
+        .social-label {
+            color: white;
+            font-size: 1rem;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .social-icon {
+                width: 60px;
+                height: 60px;
+            }
+            .social-icon svg {
+                width: 30px;
+                height: 30px;
+            }
+            #social-links {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="stars"></div>
+        <div id="content">
+            <h1>TORTILO</h1>
+            <h2>Игровой проект</h2>
+        </div>
+        <div id="social-links">
+            <a href="https://t.me/PythonGoha" target="_blank" class="social-link">
+                <div class="social-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <span class="social-label">Chat</span>
+            </a>
+            <a href="https://t.me/izzidev" target="_blank" class="social-link">
+                <div class="social-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <span class="social-label">Новости</span>
+            </a>
+            <a href="https://t.me/realLife_robot" target="_blank" class="social-link">
+                <div class="social-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <span class="social-label">Наш бот</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const starsContainer = document.getElementById('stars');
+        const container = document.getElementById('container');
+        
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.width = (Math.random() * 2 + 1) + 'px';
+            star.style.height = star.style.width;
+            star.style.animationDelay = Math.random() * 2 + 's';
+            star.style.animationDuration = (Math.random() * 2 + 1) + 's';
+            starsContainer.appendChild(star);
+        }
+        
+        for (let i = 0; i < 5; i++) {
+            const leaf = document.createElement('div');
+            leaf.className = 'leaf';
+            leaf.textContent = '🍂';
+            leaf.style.left = Math.random() * 100 + '%';
+            leaf.style.animationDelay = Math.random() * 8 + 's';
+            leaf.style.animationDuration = (Math.random() * 3 + 5) + 's';
+            leaf.style.color = ['#d97706', '#ea580c', '#b45309'][Math.floor(Math.random() * 3)];
+            starsContainer.appendChild(leaf);
+        }
+        
+        function createShootingStar() {
+            const star = document.createElement('div');
+            star.className = 'shooting-star';
+            star.style.left = (Math.random() * 50 + 50) + '%';
+            star.style.top = (Math.random() * 30) + '%';
+            starsContainer.appendChild(star);
+            
+            setTimeout(() => star.remove(), 2000);
+        }
+        
+        setInterval(createShootingStar, Math.random() * 1500 + 1500);
+        
+        container.addEventListener('click', (e) => {
+            const effect = document.createElement('div');
+            effect.className = 'click-effect';
+            effect.style.left = e.clientX + 'px';
+            effect.style.top = e.clientY + 'px';
+            
+            for (let i = 0; i < 12; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'ripple-dot';
+                dot.style.animationDelay = (i * 0.05) + 's';
+                const angle = i * 30;
+                const rad = angle * Math.PI / 180;
+                const distance = 20;
+                dot.style.left = '50%';
+                dot.style.top = '50%';
+                dot.style.transform = `translate(-50%, -50%) rotate(${angle}deg) translateY(-${distance}px)`;
+                effect.appendChild(dot);
+            }
+            
+            container.appendChild(effect);
+            setTimeout(() => effect.remove(), 800);
+        });
+    </script>
+</body>
+</html>
